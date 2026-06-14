@@ -1,0 +1,12 @@
+FROM openjdk:24-slim as builder
+
+WORKDIR /app
+COPY src/ /app/src/
+RUN javac -d bin -sourcepath src src/bankOp/Main.java
+
+FROM openjdk:24-slim
+
+WORKDIR /app
+COPY --from=builder /app/bin /app/bin
+
+ENTRYPOINT ["java", "-cp", "bin", "bankOp.Main"]
